@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>RGTOPUP — গেম টপ-আপ স্টোর</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root{
+  --primary:#22C55E;--primary-dark:#16A34A;--primary-soft:#DCFCE7;
+  --accent:#0EA5E9;--success:#10B981;--danger:#EF4444;--warning:#F59E0B;
+  --bg:#F8FAFC;--card:#FFFFFF;--text:#0F172A;--muted:#64748B;--line:#E2E8F0;
+  --radius-xl:20px;--radius-lg:16px;--radius-md:12px;
+  --shadow:0 8px 26px rgba(34,197,94,.12);
+  --shadow-sm:0 4px 12px rgba(15,23,42,.05);
+  --font:'Hind Siliguri','Poppins',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;}
+input,button,select,textarea{font-family:inherit;}
+
+.app-container{position:relative;width:100%;max-width:480px;margin:auto;min-height:100vh;background:var(--bg);padding-bottom:80px;}
+
+/* HEADER */
+.header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:100;}
+.logo{display:flex;align-items:center;gap:8px;font-size:18px;font-weight:700;color:var(--primary);letter-spacing:.5px;}
+.logo i{font-size:24px;}
+.logo img{height:28px;width:auto;object-fit:contain;}
+
+/* NOTICE */
+.notice-box{background:#E8F5E9;border:1px solid #C8E6C9;border-radius:8px;padding:12px 15px;margin:12px 16px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+.notice-box p{font-size:13.5px;color:#1B5E20;line-height:1.5;}
+.notice-box .close-notice{color:#1B5E20;cursor:pointer;font-weight:bold;font-size:18px;}
+
+/* SLIDER */
+.slider-wrap{width:calc(100% - 32px);margin:0 16px 16px 16px;height:150px;border-radius:var(--radius-xl);overflow:hidden;position:relative;box-shadow:var(--shadow-sm);background:var(--card);}
+.slider{display:flex;height:100%;transition:transform .5s ease-in-out;}
+.slide{min-width:100%;height:100%;}
+.slide img{width:100%;height:100%;object-fit:cover;display:block;}
+.slider-arrow{position:absolute;top:50%;transform:translateY(-50%);width:34px;height:34px;background:rgba(255,255,255,.85);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#333;cursor:pointer;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+.slider-arrow.prev{left:10px;}
+.slider-arrow.next{right:10px;}
+.slider-dots{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:5px;}
+.slider-dots span{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.5);}
+.slider-dots span.active{background:#fff;width:18px;border-radius:4px;}
+
+/* GAME GRID */
+.section-title{font-size:18px;font-weight:700;margin:16px 16px 12px 16px;color:var(--text);}
+.game-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;padding:0 16px;}
+.game-card{background:var(--card);border-radius:var(--radius-lg);overflow:hidden;cursor:pointer;box-shadow:var(--shadow-sm);border:1px solid var(--line);transition:.2s;display:flex;flex-direction:column;}
+.game-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);}
+.game-thumb{height:120px;display:flex;align-items:center;justify-content:center;padding:10px;}
+.game-thumb img{width:100%;height:100%;object-fit:contain;}
+.game-meta{padding:8px 10px 12px;text-align:center;}
+.game-meta h4{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.game-meta small{font-size:12px;color:var(--primary);font-weight:600;}
+
+/* SCREENS */
+.screen{display:none;padding:16px;}
+.screen.active{display:block;}
+.page-head{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.back{width:36px;height:36px;border-radius:50%;background:var(--card);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow-sm);}
+.panel{background:var(--card);border-radius:var(--radius-lg);padding:16px;box-shadow:var(--shadow-sm);margin-bottom:16px;border:1px solid var(--line);}
+.panel-header{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:700;color:var(--primary);padding-bottom:12px;border-bottom:1px solid var(--line);margin-bottom:16px;}
+.step-circle{width:28px;height:28px;border-radius:50%;background:var(--primary);color:white;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;flex:none;}
+.input-label{font-size:15px;font-weight:600;margin-bottom:8px;display:block;}
+.player-input{width:100%;padding:15px;border-radius:30px;border:1.5px solid var(--line);background:var(--card);color:var(--text);font-size:16px;outline:none;margin-bottom:12px;transition:.2s;}
+.player-input:focus{border-color:var(--primary);}
+.nickname-box{display:none;background:#F0FDF4;border:1px solid #BBF7D0;padding:12px 15px;border-radius:12px;font-size:15px;color:var(--primary-dark);font-weight:600;}
+.nickname-box.loading{color:var(--muted);font-weight:normal;font-style:italic;}
+.pkg-grid,.pay-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.pkg,.pay{background:var(--bg);border:2px solid transparent;border-radius:var(--radius-md);padding:12px;cursor:pointer;text-align:center;transition:.2s;}
+.pkg.selected,.pay.selected{border-color:var(--primary);background:var(--primary-soft);}
+.pkg .amt{font-weight:600;font-size:14px;}
+.pkg .prc{font-size:13px;color:var(--primary);font-weight:700;}
+.pay{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:80px;}
+.pay img{max-height:35px;object-fit:contain;}
+.pay span{font-size:12px;font-weight:600;}
+.input-group input{width:100%;padding:13px 15px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--text);font-size:14px;outline:none;margin-bottom:10px;}
+.input-group input:focus{border-color:var(--primary);}
+.btn{display:block;width:100%;border:none;cursor:pointer;text-align:center;padding:14px;border-radius:var(--radius-md);font-size:16px;font-weight:600;background:var(--primary);color:#fff;transition:.2s;}
+.btn:hover{background:var(--primary-dark);}
+
+/* SUPPORT PANEL */
+.support-panel{display:flex;gap:10px;margin-top:12px;}
+.support-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:var(--radius-md);font-size:14px;font-weight:600;text-decoration:none;color:#fff;transition:.2s;}
+.support-btn.whatsapp{background:#25D366;}
+.support-btn.telegram{background:#0088cc;}
+
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:10px 0;z-index:900;}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--muted);font-size:11px;cursor:pointer;flex:1;transition:.2s;}
+.nav-item i{font-size:20px;}
+.nav-item.active{color:var(--primary);}
+.hist{background:var(--bg);border-radius:var(--radius-md);padding:12px;margin-bottom:10px;border:1px solid var(--line);}
+.hist-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.badge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;color:#fff;}
+.badge.Pending{background:var(--warning);}
+.badge.Approved,.badge.Completed{background:var(--success);}
+.badge.Rejected{background:var(--danger);}
+.row{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;color:var(--muted);}
+.row strong{color:var(--text);}
+
+#toastBox{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:2000;display:flex;flex-direction:column;gap:8px;width:90%;max-width:400px;pointer-events:none;}
+.toast{padding:12px 16px;border-radius:12px;font-size:13.5px;font-weight:500;color:#fff;box-shadow:0 8px 20px rgba(0,0,0,.2);display:flex;align-items:center;gap:8px;animation:toastIn .3s ease;}
+.toast.success{background:var(--primary);}
+.toast.error{background:var(--danger);}
+@keyframes toastIn{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:none;}}
+.spinner{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-text{text-align:center;color:var(--muted);padding:30px;font-size:14px;}
+</style>
+</head>
+<body>
+
+<div class="app-container" id="appContainer">
+
+  <header class="header">
+    <div class="logo">
+      <i class="fa-solid fa-gamepad" id="logoIcon"></i>
+      <img id="logoImg" src="" style="display:none;" alt="logo">
+      <span id="appNameDisplay">RGTOPUP</span>
+    </div>
+  </header>
+
+  <div class="notice-box" id="noticeBox" style="display:none;">
+    <p id="noticeText"></p>
+    <span class="close-notice" onclick="document.getElementById('noticeBox').style.display='none'">&times;</span>
+  </div>
+
+  <div class="slider-wrap" id="sliderWrap">
+    <div class="slider" id="slider"></div>
+    <div class="slider-arrow prev" onclick="changeSlide(-1)"><i class="fa-solid fa-chevron-left"></i></div>
+    <div class="slider-arrow next" onclick="changeSlide(1)"><i class="fa-solid fa-chevron-right"></i></div>
+    <div class="slider-dots" id="sliderDots"></div>
+  </div>
+
+  <!-- HOME SCREEN -->
+  <div class="screen active" id="homeScreen">
+    <div class="section-title" id="gameSectionTitle">GAME TOP UP</div>
+    <div class="game-grid" id="gameGrid">
+      <div class="loading-text" style="grid-column:1/-1;">
+        <i class="fa-solid fa-spinner fa-spin"></i> গেম লোড হচ্ছে...
+      </div>
+    </div>
+  </div>
+
+  <!-- TOPUP SCREEN -->
+  <div class="screen" id="topupScreen">
+    <div class="page-head">
+      <div class="back" onclick="go('homeScreen')"><i class="fa-solid fa-arrow-left"></i></div>
+      <h2 id="gameTitle">TOP UP</h2>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><span class="step-circle">1</span> Account Info</div>
+      <label class="input-label">Player Id</label>
+      <input type="text" id="playerId" class="player-input" placeholder="Enter Player ID" oninput="handlePlayerIdInput()">
+      <div id="nicknameBox" class="nickname-box">NickName: <span id="nicknameText">—</span></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><span class="step-circle">2</span> Select Recharge</div>
+      <div class="pkg-grid" id="packageGrid"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><span class="step-circle">3</span> Payment Method</div>
+      <div class="pay-grid" id="topupPayGrid"></div>
+      <div class="pay-details" id="topupPayDetails" style="margin-top:12px;"></div>
+    </div>
+    <button class="btn" onclick="placeOrder()"><i class="fa-solid fa-cart-shopping"></i> অর্ডার কনফার্ম করুন</button>
+  </div>
+
+  <!-- ADD MONEY SCREEN -->
+  <div class="screen" id="addMoneyScreen">
+    <div class="page-head">
+      <div class="back" onclick="go('homeScreen')"><i class="fa-solid fa-arrow-left"></i></div>
+      <h2>অ্যাড মানি</h2>
+    </div>
+    <div class="panel">
+      <h3 class="panel-header"><span class="step-circle">1</span> আপনার তথ্য</h3>
+      <div class="input-group"><input type="text" id="addMoneyName" placeholder="আপনার নাম"></div>
+      <div class="input-group"><input type="number" id="addAmount" placeholder="কত টাকা যোগ করবেন? (যেমনঃ ৫০০)"></div>
+    </div>
+    <div class="panel">
+      <h3 class="panel-header"><span class="step-circle">2</span> পেমেন্ট মেথড</h3>
+      <div class="pay-grid" id="addMoneyPayGrid"></div>
+      <div class="pay-details" id="addMoneyDetails" style="margin-top:12px;display:none;">
+        <div style="background:var(--primary-soft);padding:12px;border-radius:var(--radius-md);text-align:center;margin-bottom:12px;">
+          <p style="font-size:13px;color:var(--muted);">নিচের নম্বরে টাকা পাঠান:</p>
+          <strong id="adminNumber" style="font-size:18px;color:var(--primary);">—</strong>
+        </div>
+        <div class="input-group"><input type="tel" id="senderNumber" placeholder="আপনার পেমেন্ট নম্বর"></div>
+        <div class="input-group"><input type="text" id="trxId" placeholder="ট্রানজেকশন আইডি (TrxID)"></div>
+      </div>
+    </div>
+    <button class="btn" onclick="submitMoneyRequest()">রিকোয়েস্ট করুন</button>
+  </div>
+
+  <!-- SUPPORT SCREEN / PROFILE -->
+  <div class="screen" id="profileScreen">
+    <div class="page-head"><h2 style="margin:auto;">সাপোর্ট ও যোগাযোগ</h2></div>
+    <div class="panel">
+      <h3 style="font-size:16px;font-weight:700;margin-bottom:12px;"><i class="fa-solid fa-headset" style="color:var(--primary);"></i> সাপোর্ট টিম</h3>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">যেকোনো প্রয়োজনে আমাদের সাথে যোগাযোগ করুন:</p>
+      <div class="support-panel">
+        <a href="https://wa.me/8801804253582" target="_blank" class="support-btn whatsapp">
+          <i class="fa-brands fa-whatsapp" style="font-size:18px;"></i> WhatsApp
+        </a>
+        <a href="https://t.me/+8801818276472" target="_blank" class="support-btn telegram">
+          <i class="fa-brands fa-telegram" style="font-size:18px;"></i> Telegram
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ORDER HISTORY SCREEN -->
+  <div class="screen" id="orderHistoryScreen">
+    <div class="page-head"><h2 style="margin:auto;">সকল অর্ডারসমূহ</h2></div>
+    <div id="orderHistoryList">
+      <div class="loading-text">অর্ডার লোড হচ্ছে...</div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <div class="nav-item active" onclick="go('homeScreen', this)"><i class="fa-solid fa-house"></i><span>হোম</span></div>
+    <div class="nav-item" onclick="go('orderHistoryScreen', this)"><i class="fa-solid fa-receipt"></i><span>অর্ডার</span></div>
+    <div class="nav-item" onclick="go('addMoneyScreen', this)"><i class="fa-solid fa-plus-circle" style="font-size:24px;color:var(--primary);"></i><span>অ্যাড মানি</span></div>
+    <div class="nav-item" onclick="go('profileScreen', this)"><i class="fa-solid fa-headset"></i><span>সাপোর্ট</span></div>
+  </nav>
+
+</div>
+
+<div id="toastBox"></div>
+
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyA813ETR3hxfcUqyILdr1wSVgyXI1MvvNg",
+  authDomain: "gamestore-3addc.firebaseapp.com",
+  databaseURL: "https://gamestore-3addc-default-rtdb.firebaseio.com",
+  projectId: "gamestore-3addc",
+  storageBucket: "gamestore-3addc.firebasestorage.app",
+  messagingSenderId: "243275206854",
+  appId: "1:243275206854:web:2feb8968aad9e27eb547c7"
+};
+
+try {
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+} catch (err) {
+  console.error("Firebase Init Error:", err);
+}
+
+const db = firebase.firestore();
+const FB = firebase.firestore.FieldValue;
+
+let gamesList = [];
+let payMethods = [];
+let activeGame = null;
+let activePackage = null;
+let activePay = null;
+let addMoneyPay = null;
+let typingTimer;
+
+function toast(msg, type = 'success') {
+  const icons = { success: 'fa-circle-check', error: 'fa-circle-exclamation', info: 'fa-circle-info' };
+  const el = document.createElement('div');
+  el.className = 'toast ' + type;
+  el.innerHTML = `<i class="fa-solid ${icons[type]}"></i><span>${escapeHtml(msg)}</span>`;
+  document.getElementById('toastBox').appendChild(el);
+  setTimeout(() => { el.style.opacity = '0'; el.style.transition = '.3s'; }, 2600);
+  setTimeout(() => el.remove(), 3000);
+}
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+/* ===== PLAYER ID NICKNAME ===== */
+function handlePlayerIdInput() {
+  clearTimeout(typingTimer);
+  const playerId = document.getElementById('playerId').value.trim();
+  const nickBox = document.getElementById('nicknameBox');
+  const nickText = document.getElementById('nicknameText');
+  if (playerId.length < 5) { nickBox.style.display = 'none'; return; }
+  nickBox.style.display = 'block';
+  nickBox.classList.add('loading');
+  nickText.textContent = 'খোঁজা হচ্ছে...';
+  typingTimer = setTimeout(() => {
+    nickBox.classList.remove('loading');
+    nickText.textContent = "Player_" + playerId.slice(-4);
+  }, 800);
+}
+
+/* ===== LOAD SITE SETTINGS ===== */
+function loadSiteSettings() {
+  db.collection('settings').doc('site').onSnapshot(doc => {
+    if (!doc.exists) { initSlider([]); return; }
+    const s = doc.data();
+    if (s.appName) {
+      document.getElementById('appNameDisplay').textContent = s.appName;
+      document.title = s.appName + ' — গেম টপ-আপ স্টোর';
+    }
+    if (s.logoUrl) {
+      document.getElementById('logoIcon').style.display = 'none';
+      const img = document.getElementById('logoImg');
+      img.src = s.logoUrl;
+      img.style.display = 'block';
+    }
+    if (s.noticeText && s.noticeStatus !== 'hide') {
+      document.getElementById('noticeText').textContent = s.noticeText;
+      document.getElementById('noticeBox').style.display = 'flex';
+    } else {
+      document.getElementById('noticeBox').style.display = 'none';
+    }
+    initSlider(Array.isArray(s.banners) ? s.banners : []);
+  }, () => initSlider([]));
+}
+
+/* ===== LOAD GAMES ===== */
+function loadGames() {
+  db.collection('games').onSnapshot(snap => {
+    gamesList = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+      .filter(g => (g.status || 'active') === 'active');
+    renderGames(gamesList);
+  }, () => {
+    document.getElementById('gameGrid').innerHTML = `<div class="loading-text" style="grid-column:1/-1;">গেম লোড করতে সমস্যা হয়েছে</div>`;
+  });
+}
+
+function renderGames(list) {
+  const grid = document.getElementById('gameGrid');
+  if (!list.length) {
+    grid.innerHTML = `<div class="loading-text" style="grid-column:1/-1;">কোনো গেম পাওয়া যায়নি</div>`;
+    return;
+  }
+  grid.innerHTML = list.map(g => `
+    <div class="game-card" onclick="openGame('${g.id}')">
+      <div class="game-thumb">
+        ${g.logo ? `<img src="${escapeHtml(g.logo)}" alt="${escapeHtml(g.name)}" onerror="this.style.display='none'">` : `<i class="fa-solid fa-gamepad" style="font-size:40px;color:var(--muted);"></i>`}
+      </div>
+      <div class="game-meta">
+        <h4>${escapeHtml(g.name)}</h4>
+        <small>টপ-আপ করুন <i class="fa-solid fa-arrow-right"></i></small>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openGame(gameId) {
+  const game = gamesList.find(g => g.id === gameId);
+  if (!game) return;
+  activeGame = game;
+  document.getElementById('gameTitle').textContent = game.name;
+  const grid = document.getElementById('packageGrid');
+  grid.innerHTML = '';
+  const pkgs = Array.isArray(game.packages) ? game.packages : [];
+  if (!pkgs.length) {
+    grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:var(--muted);padding:20px;">কোনো প্যাকেজ নেই</p>`;
+  } else {
+    pkgs.forEach(p => {
+      const el = document.createElement('div');
+      el.className = 'pkg';
+      el.innerHTML = `<div class="amt">${escapeHtml(p.amount)}</div><div class="prc">৳ ${escapeHtml(p.price)}</div>`;
+      el.onclick = () => {
+        document.querySelectorAll('#packageGrid .pkg').forEach(x => x.classList.remove('selected'));
+        el.classList.add('selected');
+        activePackage = p;
+      };
+      grid.appendChild(el);
+    });
+  }
+  document.getElementById('playerId').value = '';
+  document.getElementById('nicknameBox').style.display = 'none';
+  document.getElementById('topupPayDetails').innerHTML = '';
+  activePackage = null;
+  activePay = null;
+  go('topupScreen');
+}
+
+/* ===== LOAD PAYMENT METHODS ===== */
+function loadPayMethods() {
+  db.collection('paymentMethods').onSnapshot(snap => {
+    payMethods = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderPaymentGrids();
+  }, () => {});
+}
+
+function renderPaymentGrids() {
+  const topupGrid = document.getElementById('topupPayGrid');
+  const addGrid = document.getElementById('addMoneyPayGrid');
+  topupGrid.innerHTML = '';
+  addGrid.innerHTML = '';
+  payMethods.forEach(m => {
+    topupGrid.innerHTML += `<div class="pay" onclick="selectTopupPayment('${m.id}', this)"><img src="${escapeHtml(m.logoUrl||'')}" onerror="this.style.display='none'"><span>${escapeHtml(m.name)}</span></div>`;
+    addGrid.innerHTML += `<div class="pay" onclick="selectAddMoneyPayment('${m.id}', this)"><img src="${escapeHtml(m.logoUrl||'')}" onerror="this.style.display='none'"><span>${escapeHtml(m.name)}</span></div>`;
+  });
+}
+
+function selectTopupPayment(key, el) {
+  document.querySelectorAll('#topupPayGrid .pay').forEach(x => x.classList.remove('selected'));
+  el.classList.add('selected');
+  const m = payMethods.find(p => p.id === key);
+  if (!m) return;
+  activePay = m;
+  document.getElementById('topupPayDetails').innerHTML = `
+    <div style="background:var(--primary-soft);padding:12px;border-radius:var(--radius-md);text-align:center;margin-bottom:12px;">
+      <p style="font-size:13px;color:var(--muted);">নিচের নম্বরে টাকা পাঠান:</p>
+      <strong style="font-size:18px;color:var(--primary);">${escapeHtml(m.number)}</strong>
+    </div>
+    <div class="input-group" style="margin-bottom:10px;"><input type="tel" id="orderSenderNumber" placeholder="আপনার পেমেন্ট নম্বর"></div>
+    <div class="input-group"><input type="text" id="orderTrxId" placeholder="ট্রানজেকশন আইডি (TrxID)"></div>
+  `;
+}
+
+function selectAddMoneyPayment(key, el) {
+  document.querySelectorAll('#addMoneyPayGrid .pay').forEach(x => x.classList.remove('selected'));
+  el.classList.add('selected');
+  const m = payMethods.find(p => p.id === key);
+  if (!m) return;
+  addMoneyPay = m;
+  document.getElementById('adminNumber').textContent = m.number || '—';
+  document.getElementById('addMoneyDetails').style.display = 'block';
+}
+
+/* ===== PLACE ORDER ===== */
+async function placeOrder() {
+  const playerId = document.getElementById('playerId').value.trim();
+  const nickname = document.getElementById('nicknameText').textContent;
+  if (!playerId) return toast('প্লেয়ার আইডি দিন', 'error');
+  if (!activePackage) return toast('প্যাকেজ বেছে নিন', 'error');
+  if (!activePay) return toast('পেমেন্ট মেথড বেছে নিন', 'error');
+  
+  const sender = (document.getElementById('orderSenderNumber') || {}).value || '';
+  const trx = (document.getElementById('orderTrxId') || {}).value || '';
+  if (!sender.trim() || !trx.trim()) return toast('পেমেন্ট নম্বর ও TrxID দিন', 'error');
+
+  const orderData = {
+    game: activeGame.name, package: activePackage.amount, price: parseFloat(activePackage.price) || 0,
+    playerId, nickname, paymentMethod: activePay.name,
+    adminNumber: activePay.number || '', userPaymentNumber: sender.trim(),
+    transactionId: trx.trim(), status: 'Pending', date: FB.serverTimestamp()
+  };
+
+  try {
+    await db.collection('orders').add(orderData);
+    toast('অর্ডার সফলভাবে জমা হয়েছে!');
+    go('orderHistoryScreen');
+  } catch (e) {
+    toast('অর্ডার করতে সমস্যা হয়েছে', 'error');
+  }
+}
+
+/* ===== ADD MONEY ===== */
+async function submitMoneyRequest() {
+  const name = document.getElementById('addMoneyName').value.trim();
+  const amount = parseFloat(document.getElementById('addAmount').value);
+  const sender = document.getElementById('senderNumber').value.trim();
+  const trx = document.getElementById('trxId').value.trim();
+  if (!name) return toast('আপনার নাম লিখুন', 'error');
+  if (!amount || amount <= 0) return toast('সঠিক অ্যামাউন্ট লিখুন', 'error');
+  if (!addMoneyPay) return toast('পেমেন্ট মেথড বেছে নিন', 'error');
+  if (!sender || !trx) return toast('পেমেন্ট নম্বর ও TrxID দিন', 'error');
+
+  try {
+    await db.collection('moneyRequests').add({
+      userName: name, amount, paymentMethod: addMoneyPay.name,
+      adminNumber: addMoneyPay.number || '', userPaymentNumber: sender, transactionId: trx,
+      status: 'Pending', date: FB.serverTimestamp()
+    });
+    toast('রিকোয়েস্ট পাঠানো হয়েছে!');
+    document.getElementById('addMoneyName').value = '';
+    document.getElementById('addAmount').value = '';
+    document.getElementById('senderNumber').value = '';
+    document.getElementById('trxId').value = '';
+    go('homeScreen');
+  } catch (e) {
+    toast('রিকোয়েস্ট পাঠানো যায়নি', 'error');
+  }
+}
+
+/* ===== ORDER HISTORY ===== */
+function listenOrders() {
+  db.collection('orders').onSnapshot(snap => {
+    const orders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    orders.sort((a, b) => (b.date?.seconds || 0) - (a.date?.seconds || 0));
+    const box = document.getElementById('orderHistoryList');
+    if (!orders.length) { box.innerHTML = `<p style="text-align:center;color:var(--muted);padding:20px;">কোনো অর্ডার নেই</p>`; return; }
+    box.innerHTML = orders.map(o => {
+      const d = o.date ? o.date.toDate() : new Date();
+      return `
+        <div class="hist">
+          <div class="hist-top">
+            <span style="font-weight:600;">${escapeHtml(o.game)}</span>
+            <span class="badge ${o.status}">${o.status}</span>
+          </div>
+          <div class="row"><span>প্লেয়ার আইডি</span><strong>${escapeHtml(o.playerId)}</strong></div>
+          <div class="row"><span>প্যাকেজ</span><strong>${escapeHtml(o.package)}</strong></div>
+          <div class="row"><span>মূল্য</span><strong>৳ ${escapeHtml(o.price)}</strong></div>
+          <div class="row"><span>TrxID</span><strong>${escapeHtml(o.transactionId || 'N/A')}</strong></div>
+          <div class="row"><span>তারিখ</span><strong>${d.toLocaleString('bn-BD')}</strong></div>
+        </div>`;
+    }).join('');
+  }, () => {});
+}
+
+/* ===== NAVIGATION ===== */
+function go(screenId, navEl) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById(screenId);
+  if (target) target.classList.add('active');
+  const homeContent = ['noticeBox','sliderWrap','gameSectionTitle'];
+  homeContent.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = (screenId === 'homeScreen') ? '' : 'none';
+  });
+  if (navEl && navEl.classList.contains('nav-item')) {
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    navEl.classList.add('active');
+  }
+  window.scrollTo(0, 0);
+}
+
+/* ===== SLIDER ===== */
+let slideIdx = 0, totalSlides = 0, slideTimer = null;
+function initSlider(images) {
+  const slider = document.getElementById('slider');
+  const dots = document.getElementById('sliderDots');
+  if (!Array.isArray(images) || !images.length) {
+    images = [
+      'https://via.placeholder.com/400x150/22C55E/FFFFFF?text=RGTOPUP',
+      'https://via.placeholder.com/400x150/16A34A/FFFFFF?text=Fast+Topup'
+    ];
+  }
+  totalSlides = images.length;
+  slider.innerHTML = images.map(img => `<div class="slide"><img src="${escapeHtml(img)}" onerror="this.src='https://via.placeholder.com/400x150/22C55E/FFFFFF?text=Banner'"></div>`).join('');
+  dots.innerHTML = images.map((_, i) => `<span class="${i === 0 ? 'active' : ''}"></span>`).join('');
+  slideIdx = 0;
+  updateSlider();
+  clearInterval(slideTimer);
+  if (totalSlides > 1) slideTimer = setInterval(() => changeSlide(1), 3500);
+}
+function changeSlide(dir) {
+  slideIdx = (slideIdx + dir + totalSlides) % totalSlides;
+  updateSlider();
+}
+function updateSlider() {
+  document.getElementById('slider').style.transform = `translateX(-${slideIdx * 100}%)`;
+  document.querySelectorAll('#sliderDots span').forEach((d, i) => d.classList.toggle('active', i === slideIdx));
+}
+
+/* ===== INITIALIZE ===== */
+window.addEventListener('load', () => {
+  loadSiteSettings();
+  loadGames();
+  loadPayMethods();
+  listenOrders();
+});
+</script>
+</body>
+            </html>
